@@ -1,0 +1,50 @@
+<?php
+defined('_JEXEC') or die;
+function sourcerer_php_1523e151d4f07b33b44e04d6ad6d6937($src_variables){
+$app = $mainframe = JFactory::getApplication();
+$document = $doc = JFactory::getDocument();
+$database = $db = JFactory::getDbo();
+$user = JFactory::getUser();
+$Itemid = $app->input->getInt('Itemid');
+if (is_array($src_variables)) {foreach ($src_variables as $src_key => $src_value) {${$src_key} = $src_value;}}
+// You can place PHP like this 
+     
+; ?> 
+<?php 
+$upload_file_size = 1 * 1024 * 1024; // 1 MB 
+$simTime = 30; // [s] 
+$steps = 1000; 
+$error_message = null; ?><!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+    <title>MATLAB demo</title> 
+    <meta name="description" content="Demo of php_mbc extension"> 
+    <meta name="author" content="Stephan Schweig"> 
+    <!--[if lt IE 9]> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script> 
+    <![endif]--> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script> 
+</head> 
+<body> 
+    <h1>MATLAB demo</h1> 
+    <h2>Upload-Form</h2> 
+     <form action="<?php echo basename($_SERVER["SCRIPT_FILENAME"]); ?>" method="post" enctype="multipart/form-data"> 
+        <table border="0"> 
+            <tr><td>File:</td><td style="width:300px"><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $upload_file_size; ?>" /><input type="file" name="package_file" style="width:100%" required></td></tr> 
+            <tr><td>Version:</td><td style="width:300px"><input type="text" maxlength="15" name="package_version" value="1.0.0.0" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" style="width:100%" required></td></tr> 
+            <tr><td>Author:</td><td style="width:300px"><input type="text" name="package_author" value="Max Mustermann" style="width:100%" required></td></tr> 
+            <tr><td>Description:</td><td style="width:300px"><input type="text" name="package_description" value="Testbuild <?php echo date("d.m.Y H:i:s"); ?>" style="width:100%"></td></tr> 
+        </table> 
+        <button type="submit" class="btn btn-primary pull-right">Upload package</button> 
+    </form> 
+<?php 
+if(isset($_FILES["package_file"])) { 
+    echo " <hr />\n"; 
+    if($_FILES["package_file"]["error"] == UPLOAD_ERR_OK) 
+    { 
+         
+        };
+;return get_defined_vars();
+;}

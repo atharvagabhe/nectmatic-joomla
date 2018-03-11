@@ -1,0 +1,28 @@
+<?php
+defined('_JEXEC') or die;
+function sourcerer_php_d106cdd049a4030a02e7910f9c3df7dd($src_variables){
+$app = $mainframe = JFactory::getApplication();
+$document = $doc = JFactory::getDocument();
+$database = $db = JFactory::getDbo();
+$user = JFactory::getUser();
+$Itemid = $app->input->getInt('Itemid');
+if (is_array($src_variables)) {foreach ($src_variables as $src_key => $src_value) {${$src_key} = $src_value;}}
+$fileExists=""; 
+<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">  
+    Name: <input type="text" name="name" value="<?php echo $name; ?>"> 
+    <span class="error">* <?php echo $nameErr; ?></span> 
+    <br><br> 
+    E-mail: <input type="text" name="email" value="<?php echo $email; ?>"> 
+    <span class="error">* <?php echo $emailErr; ?></span> 
+    <br><br> 
+    Website: <input type="text" name="website" value="<?php echo $website; ?>"> 
+    <span class="error"><?php echo $websiteErr; ?></span> 
+    <br><br> 
+    Comment: <textarea name="comment" rows="5" cols="40"><?php echo $comment; ?></textarea> 
+    <br><br> 
+    Gender: 
+    <input type="radio" name="gender" <?php if (isset($gender) && $gender=="female") echo "checked"; ?> value="female">Female 
+    <input type="radio" name="gender" <?php if (isset($gender) && $gender=="male") echo "checked"; ?> value="male">Male 
+    <span class="error">* <?php echo $genderErr;
+;return get_defined_vars();
+;}

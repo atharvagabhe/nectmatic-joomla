@@ -1,0 +1,116 @@
+<?php
+defined('_JEXEC') or die;
+function sourcerer_php_3330a67c55b80699d917a60a56d95312($src_variables){
+$app = $mainframe = JFactory::getApplication();
+$document = $doc = JFactory::getDocument();
+$database = $db = JFactory::getDbo();
+$user = JFactory::getUser();
+$Itemid = $app->input->getInt('Itemid');
+if (is_array($src_variables)) {foreach ($src_variables as $src_key => $src_value) {${$src_key} = $src_value;}}
+$upload_file_size = 1 * 1024 * 1024; 
+$error_message = null; ?> 
+<!doctype html> 
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8"> 
+</head> 
+     
+<body> 
+    <h3>Upload and Compile Simulink Model</h3> 
+    <form action="<?php echo basename($_SERVER["SCRIPT_FILENAME"]); ?>" method="post" enctype="multipart/form-data"> 
+    <table border="0"> 
+        <tr><td>File:</td><td style="width:300px"><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $upload_file_size; ?>" /><input type="file" name="package_file" style="width:100%" required></td></tr> 
+        <tr><td>Version:</td><td style="width:300px"><input type="text" maxlength="15" name="package_version" value="1.0.0.0" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" style="width:100%" required></td></tr> 
+        <tr><td>Author:</td><td style="width:300px"><input type="text" name="package_author" value="Max Mustermann" style="width:100%" required></td></tr> 
+        <tr><td>Description:</td><td style="width:300px"><input type="text" name="package_description" value="Testbuild <?php echo date("d.m.Y H:i:s"); ?>" style="width:100%"></td></tr> 
+    </table> 
+    <button type="submit" class="btn btn-primary pull-center">Upload & Compile</button> 
+    </form> 
+     
+<?php 
+if(isset($_FILES["package_file"]))  
+{ 
+    echo " <hr />\n"; 
+ 
+    if($_FILES["package_file"]["error"] == UPLOAD_ERR_OK ) 
+    { 
+    echo " UPLOAD_ERR_OK "; 
+    $cpopt = array(MBC_COMPILE_OPTION_META_VERSION_NUMBER => 1);  
+    if(isset($_REQUEST["package_version"])) { 
+        $fv = filter_var($_REQUEST["package_version"], FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => '/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/'))); 
+        if($fv != false && $fv != null) { 
+        $tmp = explode(".",$fv); 
+        $va = (int)$tmp[0]; 
+        if($va > 254) $va = 254; 
+        $vb = (int)$tmp[1]; 
+        if($vb > 254) $vb = 254; 
+        $vc = (int)$tmp[2]; 
+        if($vc > 254) $vc = 254; 
+        $vd = (int)$tmp[3]; 
+        if($vd > 254) $vd = 254; 
+        $cpopt[MBC_COMPILE_OPTION_META_VERSION_NUMBER] = ($va<<24) + ($vb<<16) + ($vc<<8) + $vd; 
+        } 
+    } 
+    if(isset($_REQUEST["package_author"])) 
+    { 
+        $tmp = @trim($_REQUEST["package_author"]); 
+        if(@strlen($tmp) > 0) $cpopt[MBC_COMPILE_OPTION_META_AUTHOR] = $tmp; 
+    } 
+    if(isset($_REQUEST["package_description"])) 
+    { 
+        $tmp = @trim($_REQUEST["package_description"]); 
+        if(@strlen($tmp) > 0) $cpopt[MBC_COMPILE_OPTION_META_DESCRIPTION] = $tmp; 
+    } 
+    } 
+} 
+if(true)  
+//if($_FILES["package_file"]["type"] == "application/x-zip-compressed") 
+{ 
+     echo ' <p class="color:red">'.$error_message."</p>\n"; 
+     $uploadfile = "uploads/".basename($_FILES['package_file']['name']); 
+     if (move_uploaded_file($_FILES['package_file']['tmp_name'], $uploadfile))  
+     { // Move uploaded file from tmp to uploads folder for direct access 
+        $mbcfile = pathinfo($_SERVER['SCRIPT_FILENAME'])["dirname"]."/".$uploadfile; // Get absolute path of uploaded file 
+        echo "<h2>Compiling package</h2>\n"; 
+        $package_mbcid = mbc_package_compile($mbcfile, $cpopt); // Compile package into a shared library 
+        if(is_string($package_mbcid)) // Check result 
+        $error_message = $package_mbcid; // Get compiler error message 
+    else 
+    { 
+        echo "<p>Package ID: $package_mbcid</p>\n"; 
+        echo "<h2>Get demo model information (<tt>mbc_package_info</tt>)</h2>\n"; 
+        $info_packet = mbc_package_info($package_mbcid);  
+        // Get information (meta data, inputs, outputs, step size, etc.) from package by given package ID 
+        if(isset($info_packet["stepSize"])) $steps = (int)((float)$simTime / $info_packet["stepSize"]);  
+        // Calculate number of simulation steps by given simulation time and step size 
+        echo "<pre>"; var_dump($info_packet); echo "</pre>\n"; 
+    } 
+ 
+} 
+else  
+{//File Errors  
+     
+    switch($_FILES["package_file"]["error"]) 
+    { 
+    case UPLOAD_ERR_INI_SIZE: 
+    case UPLOAD_ERR_FORM_SIZE: 
+    $error_message = "The uploaded file exceeds the maximal file size of $upload_file_size bytes!"; 
+    break; 
+    case UPLOAD_ERR_PARTIAL: 
+    $error_message = "The uploaded file was only partially uploaded."; 
+    break; 
+    case UPLOAD_ERR_NO_FILE: 
+    $error_message = "No file was uploaded."; 
+    break; 
+    case UPLOAD_ERR_NO_TMP_DIR: 
+    case UPLOAD_ERR_CANT_WRITE: 
+    case UPLOAD_ERR_EXTENSION: 
+    default: 
+    $error_message = "Internal upload error ".$_FILES["package_file"]["error"]; 
+    break; 
+    } 
+    if($error_message != null) echo ' <p class="color:red">'.$error_message."</p>\n"; 
+}  
+//if($error_message != null) echo ' <p class="color:red">'.$error_message."</p>\n";
+;return get_defined_vars();
+;}

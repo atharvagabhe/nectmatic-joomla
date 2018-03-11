@@ -1,0 +1,111 @@
+<?php
+defined('_JEXEC') or die;
+function sourcerer_php_ea87d1c7cc60a7625163bc5816c947bc($src_variables){
+$app = $mainframe = JFactory::getApplication();
+$document = $doc = JFactory::getDocument();
+$database = $db = JFactory::getDbo();
+$user = JFactory::getUser();
+$Itemid = $app->input->getInt('Itemid');
+if (is_array($src_variables)) {foreach ($src_variables as $src_key => $src_value) {${$src_key} = $src_value;}}
+$package_mbcid=1; 
+$filepath= 
+echo "<p>This may take a few minutes to load!</p>\n"; 
+//Select the package_mcbid by magic logic 
+ 
+ 
+echo "<p>Package ID: $package_mbcid</p>\n"; 
+$info_packet = mbc_package_info($package_mbcid); // Get information (meta data, inputs, outputs, step size, etc.) from package by given package ID 
+echo "<p>Creating instance of demo model (<tt>mbc_model_create</tt>)</p>\n"; 
+$model_mbcid = mbc_model_create($package_mbcid); 
+if(is_string($model_mbcid)) 
+{  
+    $error_message = $model_mbcid; // Get model error message 
+} 
+ else  
+{ 
+    echo "<p>Model ID: $model_mbcid</p>\n"; 
+    echo "<p>Getting model instance information (<tt>mbc_model_info</tt>)</p>\n"; 
+    $info_model = mbc_model_info($model_mbcid); // Get information (inputs, outputs, step size, task time, etc.) from model instance by given model ID 
+    echo "<pre>"; var_dump($info_model); echo "</pre>\n"; 
+    echo "<p>Simulating $steps steps in demo model instance (<tt>mbc_model_simulate</tt>)</p>\n"; 
+     
+     
+    $fp = fopen("lastsim.csv", "w"); 
+                echo "<table><tr><th>Step</th>"; 
+                fwrite($fp, "Step"); 
+                $inputs = array(); 
+                $input_count = 0; 
+                // Prepare array for input values 
+                if(@count($info_packet["inputs"]) > 0) 
+                { 
+                $input_count = count($info_packet["inputs"]); 
+                for($i=0;$i<$input_count;$i++) 
+                { 
+                    $inputs[$i] = 0.0; 
+                    echo "<th>".$info_packet["inputs"][$i]."</th>"; 
+                    fwrite($fp, ";".$info_packet["inputs"][$i]); 
+                } 
+                } 
+ 
+                // 
+                $outputs = array(); 
+                $output_count = 0; 
+                echo "<th>TaskTime</th>"; 
+                fwrite($fp, ";TaskTime"); 
+                // Prepare array for output values 
+                if(@count($info_packet["outputs"]) > 0) 
+                { 
+                $output_count = count($info_packet["outputs"]); 
+                for($i=0;$i<$output_count;$i++) 
+                { 
+                    $outputs[$i] = 0.0; 
+                    echo "<th>".$info_packet["outputs"][$i]."</th>"; 
+                    fwrite($fp, ";".$info_packet["outputs"][$i]); 
+                } 
+                } 
+ 
+                // 
+                echo "</tr>\n"; 
+                fwrite($fp, "\n"); 
+                $gtt = array(); 
+                $gin = array(); 
+                $gout = array(); 
+                $tm = 0.0; 
+                // Run simulation 
+                for($s = 1; $s <= $steps+1; $s++) 
+                { 
+                $inputs = array(($tm < 5.0 || (10.0 < $tm && $tm < 15.0) || (20.0 < $tm && $tm < 25.0) || (30.0 < $tm && $tm < 35.0)) ? 1.0 : 0.0, $outputs[0]); // Create a square wave signal for first input and set the last output value to second input 
+                $output_arr = mbc_model_simulate($model_mbcid,$inputs); // Perform one simulation step 
+                $outputs = $output_arr["data"]; // Get output values 
+                echo "<tr><td><b>".$s."</b></td>"; 
+                fwrite($fp, $s); 
+                for($i=0;$i<$input_count;$i++) 
+                { 
+                    echo "<td>".number_format($inputs[$i],12)."</td>"; 
+                    fwrite($fp, ";".number_format($inputs[$i],12)); 
+                } 
+                echo "<td>".number_format($output_arr["taskTime"],12)."</td>"; 
+                fwrite($fp, ";".number_format($output_arr["taskTime"],12)); 
+                for($i=0;$i<$output_count;$i++) 
+                { 
+                    echo "<td>".number_format($outputs[$i],12)."</td>"; 
+                    fwrite($fp, ";".number_format($outputs[$i],12)); 
+                } 
+                echo "</tr>"; 
+                fwrite($fp, "\n"); 
+                if(!is_nan($inputs[0]) && is_finite($inputs[0]) && !is_nan($outputs[0]) && is_finite($outputs[0])) { 
+                    $gtt[] = number_format($output_arr["taskTime"], 4); 
+                    $gin[] = $inputs[0]; 
+                    $gout[] = $outputs[0]; 
+                } 
+                $tm = $output_arr["taskTime"]; // Get time of simulation step 
+                } 
+                echo "</table>\n"; 
+ 
+                if(@file_exists("lastsim.csv") && @filesize("lastsim.csv") > 0) echo '<p><a href="lastsim.csv">Download data table</a></p>'; 
+                fclose($fp); 
+                //Closing file and exiting 
+} 
+if($error_message != null) echo ' <p class="color:red">'.$error_message."</p>\n";
+;return get_defined_vars();
+;}

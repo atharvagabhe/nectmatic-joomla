@@ -1,0 +1,12 @@
+<?php
+defined('_JEXEC') or die;
+function sourcerer_php_94ee97609bbe6926d55ad9620e1dd376($src_variables){
+$app = $mainframe = JFactory::getApplication();
+$document = $doc = JFactory::getDocument();
+$database = $db = JFactory::getDbo();
+$user = JFactory::getUser();
+$Itemid = $app->input->getInt('Itemid');
+if (is_array($src_variables)) {foreach ($src_variables as $src_key => $src_value) {${$src_key} = $src_value;}}
+echo 'This text is placed through <strong>PHP</strong>!' date('Y-m-d H:i:s');
+;return get_defined_vars();
+;}

@@ -1,0 +1,52 @@
+<?php
+defined('_JEXEC') or die;
+function sourcerer_php_d249fe17ddd0d1a3e244bd5929f3724a($src_variables){
+$app = $mainframe = JFactory::getApplication();
+$document = $doc = JFactory::getDocument();
+$database = $db = JFactory::getDbo();
+$user = JFactory::getUser();
+$Itemid = $app->input->getInt('Itemid');
+if (is_array($src_variables)) {foreach ($src_variables as $src_key => $src_value) {${$src_key} = $src_value;}}
+echo basename($_SERVER["SCRIPT_FILENAME"]); ?>" method="post" enctype="multipart/form-data"> 
+        <table border="0"> 
+            <tr><td>File:</td><td style="width:300px"><input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $upload_file_size; ?>" /><input type="file" name="package_file" style="width:100%" required></td></tr> 
+            <tr><td>Version:</td><td style="width:300px"><input type="text" maxlength="15" name="package_version" value="1.0.0.0" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" style="width:100%" required></td></tr> 
+            <tr><td>Author:</td><td style="width:300px"><input type="text" name="package_author" value="Max Mustermann" style="width:100%" required></td></tr> 
+            <tr><td>Description:</td><td style="width:300px"><input type="text" name="package_description" value="Testbuild <?php echo date("d.m.Y H:i:s"); ?>" style="width:100%"></td></tr> 
+        </table> 
+        <button type="submit" class="btn btn-primary pull-right">Upload & Compile Package</button> 
+    </form> 
+ 
+    </body> 
+ 
+</html> 
+ 
+<?php 
+if(isset($_FILES["package_file"]))  
+{ 
+echo " <hr />\n"; 
+if($_FILES["package_file"]["error"] == UPLOAD_ERR_OK) 
+{ 
+    $cpopt = array(MBC_COMPILE_OPTION_META_VERSION_NUMBER => 1); // Create array for compiler options with default version number 0.0.0.1 (meta data) 
+        if(isset($_REQUEST["package_version"]))  
+        { 
+        // Check if given version number has format w.x.y.z with max 3 digits per section 
+        $fv = filter_var($_REQUEST["package_version"], FILTER_VALIDATE_REGEXP, array("options" => array("regexp" => '/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/'))); 
+            if($fv != false && $fv != null)  
+            { 
+            // Limit each section to 254 
+            $tmp = explode(".",$fv); 
+            $va = (int)$tmp[0]; 
+            if($va > 254) $va = 254; 
+            $vb = (int)$tmp[1]; 
+            if($vb > 254) $vb = 254; 
+            $vc = (int)$tmp[2]; 
+            if($vc > 254) $vc = 254; 
+            $vd = (int)$tmp[3]; 
+            if($vd > 254) $vd = 254; 
+            $cpopt[MBC_COMPILE_OPTION_META_VERSION_NUMBER] = ($va<<24) + ($vb<<16) + ($vc<<8) + $vd; // Update default version number in compiler options array 
+            } 
+} 
+};
+;return get_defined_vars();
+;}

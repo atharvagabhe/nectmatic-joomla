@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.4" type="module" client="site" method="upgrade">
+	<name>MOD_EASYFILEUPLOADER</name>
+	<author>Michael Gilkes (Valor Apps)</author>
+	<creationDate>March 2012</creationDate>
+	<copyright>Copyright (C) 2010-2016 Michael Albert Gilkes. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2</license>
+	<authorEmail>michael@valorapps.com</authorEmail>
+	<authorUrl>https://www.valorapps.com</authorUrl>
+	<version>2.7.8</version>
+	<description>MOD_EFU_DESCRIPTION</description>
+	<help url="MOD_EFU_DOCUMENTATION" />
+	<updateservers>
+		<server type="extension" name="Easy File Uploader Updates">https://valorapps.com/updateserver/mod_easyfileuploader_updates.xml</server>
+	</updateservers>
+	<files>
+		<filename module="mod_easyfileuploader">mod_easyfileuploader.php</filename>
+		<filename>index.html</filename>
+		<filename>helper.php</filename>
+		<filename>readme.txt</filename>
+		<filename>CHANGELOG.php</filename>
+		<folder>tmpl</folder>
+		<folder>elements</folder>
+	</files>
+	<media destination="mod_easyfileuploader">
+		<folder>css</folder>
+	</media>
+	<languages folder="language">
+		<language tag="en-GB">en-GB/en-GB.mod_easyfileuploader.ini</language>
+		<language tag="en-GB">en-GB/en-GB.mod_easyfileuploader.sys.ini</language>
+		<language tag="en-US">en-US/en-US.mod_easyfileuploader.ini</language>
+		<language tag="en-US">en-US/en-US.mod_easyfileuploader.sys.ini</language>
+		<language tag="es-ES">es-ES/es-ES.mod_easyfileuploader.ini</language>
+		<language tag="es-ES">es-ES/es-ES.mod_easyfileuploader.sys.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.mod_easyfileuploader.ini</language>
+		<language tag="fr-FR">fr-FR/fr-FR.mod_easyfileuploader.sys.ini</language>
+	</languages>
+	<scriptfile>script.php</scriptfile>
+	<config>
+		<fields name="params" addfieldpath="/modules/mod_easyfileuploader/elements">
+			<fieldset name="basic">
+				<!-- Basic Required Fields -->
+				<field name="efu_parent" 
+					type="folderlist" 
+					default="images" 
+					label="MOD_EFU_PARENT_LABEL" 
+					directory="" 
+					description="MOD_EFU_PARENT_DESC" 
+					hide_none="true" 
+					hide_default="true" 
+					exclude="^[Aa]dministrator$|^[Cc]ache$|^[Cc]omponents$|^[Cc]li$|^[Ii]ncludes$|^[Ll]anguage$|^[Ll]ibraries$|^[Ll]ogs$|^[Mm]odules$|^[Pp]lugins$|^[Tt]emplates$|^[Xx]mlrpc$" 
+				/>
+				<field name="efu_folder" 
+					type="text" 
+					default="" 
+					label="MOD_EFU_FOLDER_LABEL" 
+					description="MOD_EFU_FOLDER_DESC" 
+				/>
+				<field name="efu_maxsize" 
+					type="text" 
+					default="1000000" 
+					label="MOD_EFU_MAXSIZE_LABEL" 
+					description="MOD_EFU_MAXSIZE_DESC" 
+				/>
+				<!-- Custom Text Fields -->
+				<field name="efu_spacer_custom" 
+					type="spacer" 
+					label="MOD_EFU_CUSTOM_SPACER" 
+				/>
+				<field name="efu_custom" 
+					type="radio" 
+					default="1" 
+					label="MOD_EFU_CUSTOM_LABEL" 
+					description="MOD_EFU_CUSTOM_DESC"
+					class="btn-group btn-group-yesno"
+				>
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="efu_label" 
+					type="text" 
+					default="Choose a file to upload:" 
+					label="MOD_EFU_LABELTEXT_LABEL" 
+					description="MOD_EFU_LABELTEXT_DESC" 
+				/>
+				<field name="efu_button" 
+					type="text" 
+					default="Upload File" 
+					label="MOD_EFU_BUTTON_LABEL" 
+					description="MOD_EFU_BUTTON_DESC" 
+				/>
+				<field name="efu_question" 
+					type="text" 
+					default="Replace existing files with uploaded files?" 
+					label="MOD_EFU_QUESTION_LABEL" 
+					description="MOD_EFU_QUESTION_DESC" 
+				/>
+				<field name="efu_yes" 
+					type="text" 
+					default="Yes" 
+					label="MOD_EFU_YESTEXT_LABEL" 
+					description="MOD_EFU_YESTEXT_DESC" 
+				/>
+				<field name="efu_no" 
+					type="text" 
+					default="No" 
+					label="MOD_EFU_NOTEXT_LABEL" 
+					description="MOD_EFU_NOTEXT_DESC" 
+				/>
+				<!-- Security -->
+				<field name="efu_spacer_details" 
+					type="spacer" 
+					label="MOD_EFU_DETAILS_SPACER" 
+				/>
+				<field name="efu_filetypes" 
+					type="textarea" 
+					default="image/gif;image/jpeg;image/pjpeg;image/png;application/pdf;application/msword;application/zip;application/x-compressed;application/x-zip-compressed;multipart/x-zip;application/excel;application/vnd.ms-excel;application/x-excel;application/x-msexcel" 
+					label="MOD_EFU_FILETYPES_LABEL" 
+					description="MOD_EFU_FILETYPES_DESC" 
+					rows="10" 
+					cols="40" 
+				/>
+				<field name="efu_replace" 
+					type="radio" 
+					default="1" 
+					label="MOD_EFU_REPLACE_LABEL" 
+					description="MOD_EFU_REPLACE_DESC"
+					class="btn-group btn-group-yesno"
+				>
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="efu_scriptsinarchives" 
+					type="radio" 
+					default="0" 
+					label="MOD_EFU_SCRIPTS_IN_ARCHIVE_LABEL" 
+					description="MOD_EFU_SCRIPTS_IN_ARCHIVE_DESC"
+					class="btn-group btn-group-yesno"
+				>
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<!-- Formatting -->
+				<field name="efu_spacer_format" 
+					type="spacer" 
+					label="MOD_EFU_FORMAT_SPACER" 
+				/>
+				<field name="efu_variable" 
+					type="text" 
+					default="fileToUpload" 
+					label="MOD_EFU_VARIABLE_LABEL" 
+					description="MOD_EFU_VARIABLE_DESC" 
+				/>
+				<field name="efu_multiple" 
+					type="list" 
+					default="1" 
+					label="MOD_EFU_MULTIPLE_LABEL" 
+					description="MOD_EFU_MULTIPLE_DESC"
+				>
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
+					<option value="10">10</option>
+				</field>
+				<field name="efu_shownofile" 
+					type="radio" 
+					default="1" 
+					label="MOD_EFU_SHOW_NO_FILE_UPLOADED_NOTICE_LABEL" 
+					description="MOD_EFU_SHOW_NO_FILE_UPLOADED_NOTICE_DESC"
+					class="btn-group btn-group-yesno"
+				>
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<!-- Module Class -->
+				<field name="efu_spacer_css" 
+					type="spacer" 
+					label="MOD_EFU_FILTER_SPACER" 
+				/>
+				<field name="moduleclass_sfx" 
+					type="text" 
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" 
+					description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" 
+				/>
+				<field name="layout" 
+					type="modulelayout" 
+					label="JFIELD_ALT_LAYOUT_LABEL" 
+					description="JFIELD_ALT_MODULE_LAYOUT_DESC" 
+				/>
+				<!-- Advanced Features -->
+				<field name="efu_spacer_advanced" 
+					type="spacer" 
+					label="MOD_EFU_ADVANCED_SPACER" 
+				/>
+				<field name="efu_user" 
+					type="radio" 
+					default="0" 
+					label="MOD_EFU_USER_LABEL" 
+					description="MOD_EFU_USER_DESC"
+					class="btn-group btn-group-yesno"
+				>
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="efu_mimedetect" 
+					type="easydiagnostic" 
+					label="" 
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
